@@ -18,6 +18,15 @@ Scene* HelloWorld::createScene()
     return scene;
 }
 
+Action * breathingAction()
+{
+    auto scaleUp = EaseInOut::create(ScaleTo::create(2.5, 1.1), 2);
+    auto scaleDown = EaseInOut::create(ScaleTo::create(2.5, 1.0), 2);
+    auto breathing = Sequence::create(scaleUp,scaleDown ,NULL);
+    auto repeat = RepeatForever::create(breathing);
+    return repeat;
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -27,77 +36,50 @@ bool HelloWorld::init()
     {
         return false;
     }
-    
+    {
+        auto background = ({
+            Sprite *sprite = Sprite::create("home_babies.png");
+            Size winSize = Director::getInstance()->getWinSize();
+            sprite->setPosition(Vec2(winSize.width/2, winSize.height/2));
+            float scaleX = winSize.width / sprite->getContentSize().width;
+            float scaleY = winSize.height / sprite->getContentSize().height;
+            float scale = fmaxf(scaleY, scaleX);
+            sprite->setScale(scale);
+            sprite;
+        });
+        this->addChild(background, 0);
+    }
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Vec2 middlePosition = Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y);
+    {
+        auto cell = ({
+            Sprite *sprite = Sprite::create("baby/cell.png");
+            sprite->setPosition(middlePosition);
+            sprite;
+        });
+        cell->runAction(breathingAction());
+        this->addChild(cell, 1);
+    }
+    {
+        // add a lwf
+        char buff[100];
+        sprintf(buff, "baby/week24.lwf");
+        const char *path = buff;
+        auto lwfNode = LWFNode::create(path);
+        Size size = Size(250,250);
+        lwfNode->setAnchorPoint(Vec2(0.5 ,0.5));
+        lwfNode->setPosition(middlePosition);
+        lwfNode->lwf->FitForWidth(size.width, size.height);
+        lwfNode->setContentSize(size);
+        this->addChild(lwfNode, 2);
+    }
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-
-    // add a lwf
-	const char *path = "sample3_max_optimized/sample3_max_optimized.lwf";
-	//const char *path = "mask/mask.lwf";
-    auto lwfNode = LWFNode::create(path);
-	lwfNode->lwf->AddEventHandler("done", [=](LWF::Movie *, LWF::Button *){
-		lwfNode->lwf->GotoAndPlayMovie("_root", 1);
-	});
-    lwfNode->setPosition(origin);
-    lwfNode->lwf->FitForHeight(visibleSize.width, visibleSize.height);
-    this->addChild(lwfNode);
-    
     return true;
 }
 
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
 
-    Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
 }

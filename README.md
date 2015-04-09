@@ -1,50 +1,32 @@
-Hello-LWF-Cocos2d-x
+Sample code for cocos2d-x backed animation in android fragment
 ===================
+This repo is forked from [splhack/Hello-LWF-Cocos2d-x](https://github.com/splhack/Hello-LWF-Cocos2d-x) and is the sample code for [this blog post](http://tech.glowing.com/cn/nurture-an-zhuo-ban-zhong-de-ying-er-dong-hua-shi-zen-yao-shi-xian-de/), which explains how to use cocos2d-x to support animations in a fragment.
 
-An example of LWF for C++ with Cocos2d-x renderer.
+How to use
+---
+If you just want to run the demo. Open the project under `BabyAnimationDemo`.
 
-What is LWF?
-------------
+To modify the animation part, you can:
 
-LWF http://gree.github.io/lwf/
+1. Open the project under `proj.ios_mac` or `proj.win32`;
+2. Make changes. Note that if you added or removed C++ files, `Android.mk` should also be updated;
+3. Run `./build_native.py -b release` under `proj.android` to compile for android platform;
+4. Copy files under `proj.android/libs/` to `BabyAnimationDemo/app/src/main/libs/`;
+5. Re-run `BabyAnimationDemo`
 
-> LWF is an animation engine which can play animation data converted from **FLASH contents** in HTML5, Unity, **Cocos2d-x**, iOS UIKit, and more. LWF is designed to make game development easy and fun.
 
-It means that LWF allows you to make animation using Adobe Flash for your Cocos2d-x Application.
+在 Android Fragment 中使用 Cocosd-x 的示例代码
+===================
+该项目是从 [splhack/Hello-LWF-Cocos2d-x](https://github.com/splhack/Hello-LWF-Cocos2d-x) fork 出来的。是[这一篇 Blog ](http://tech.glowing.com/cn/nurture-an-zhuo-ban-zhong-de-ying-er-dong-hua-shi-zen-yao-shi-xian-de/)的示例代码。
 
-The example
------------
+如何使用
+---
+如果你只是想要打开看看效果，打开 `BabyAnimationDemo` 下的项目。
 
-You'll see a Flash movie which is embedded on Cocos2d-x.
+如果要对动画部分作出更改：
 
-You can change LWF data in Classes/HelloWorldScene.cpp
-
-    //const char *path = "sample3_max_optimized/sample3_max_optimized.lwf";
-    const char *path = "mask/mask.lwf";
-
-![](http://gree.github.io/lwf-loader/images/lwfloader-sample3.png)
-![](http://discuss.cocos2d-x.org/uploads/default/6753/0a2b7698091bc76e.png)
-
-(This example animation is also available on HTML5 http://gree.github.io/lwf-demo/html5/lwf-loader/sample3.html)
-
-How to use Adobe Flash for making animation
--------------------------------------------
-
-Please take a look at [LWF Presentation](http://gree.github.io/lwf/presentation20121115) and [LWF Production Guide](http://gree.github.io/lwf-demo/pdf/FLASHforLWFproductionguideline.pdf).
-
-Install LWFS https://github.com/gree/lwfs to convert Adobe Flash data into LWF data. It automatically converts in ~/Desktop/LWFS_work folder and shows the data on Web browser.
-
-Notice
--------------------
-
-This project does not use any texture atlas and batch node. It means that this project is not intended to show the rendering performance using LWF on Cocos2d-x.
-
-How to use LWFNode with SpriteBatchNode
--------------------
-
-    LWFNode *lwfNode = LWFNode::create("sample.lwf");
-    SpriteBatchNode *batch = SpriteBatchNode::createWithTexture(lwfNode->getTexture());
-    batch->addChild(lwfNode);
-    this->addChild(batch);
-
-sample.lwf should be converted with one texture atlas.
+1. 打开 `proj.ios_mac` 或 `proj.win32` 下的项目;
+2. 作出更改。 注意，如果你添加或删除了 C++ 的源文件, `Android.mk` 也需要做相应的更新;
+3. 在 `proj.android` 目录下运行 `./build_native.py -b release` 进行编译;
+4. 将 `proj.android/libs/` 目录下的文件拷贝到 `BabyAnimationDemo/app/src/main/libs/`;
+5. 重新运行 `BabyAnimationDemo`
